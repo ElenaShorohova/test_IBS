@@ -1,4 +1,4 @@
-from _pytest import mark
+from pytest import mark
 
 from api.api import TestRequest
 from api.services.reqres_users import ReqresUsers
