@@ -1,6 +1,4 @@
-"""Класс базовой страницы и методы для работы с ней."""
-from asyncio import timeout
-
+"""Модуль базовой страницы и методы для работы с ней."""
 from selenium.common import TimeoutException
 from selenium.webdriver.chrome.webdriver import WebDriver
 from selenium.webdriver.remote.webelement import WebElement
@@ -12,24 +10,24 @@ class BasePage:
     """Класс базовой страницы для работы с элементами"""
     url: str
 
-    def __init__(self, driver: WebDriver, url):
+    def __init__(self, driver: WebDriver, url: str):
         """
 
         Args:
-            driver: Инстанс WebDriver.
+            driver: WebDriver.
         """
-        self._driver = driver
+        self.driver = driver
         self.url = url
 
     def driver(self) -> WebDriver:
         """Получить драйвер"""
-        return self._driver
+        return self.driver
 
     def open_url(self):
         """Открыть страницу по url"""
-        self._driver.get(self.url)
+        self.driver.get(self.url)
 
-    def find_element(self, locator, timeout: float = 20) -> WebElement:
+    def find_element(self, locator: tuple, timeout: int = 20) -> WebElement:
         """Ожидание элемента в DOM страницы.
 
         Args:
@@ -37,7 +35,7 @@ class BasePage:
             timeout: Количество секунд до тайм-аута ожидания
         """
         try:
-            element = WebDriverWait(driver=self._driver, timeout=timeout).until(
+            element = WebDriverWait(driver=self.driver, timeout=timeout).until(
                 method=EC.presence_of_element_located(locator=locator)
             )
             return element
@@ -52,15 +50,15 @@ class BasePage:
         """
         self.find_element(locator=locator).click()
 
-    def wait_text_to_be_present_in_element(self, locator, text) -> WebElement:
+    def wait_text_to_be_present_in_element(self, locator: tuple, text: str) -> WebElement:
         """Ожидание элемента с текстом в DOM страницы.
 
-                Args:
-                    locator: локатор
-                    text: Текст элемента
-                """
+        Args:
+            locator: локатор
+            text: Текст элемента
+        """
         try:
-            element = WebDriverWait(driver=self._driver, timeout=10).until(
+            element = WebDriverWait(driver=self.driver, timeout=10).until(
                 method=EC.text_to_be_present_in_element(locator=locator, text_=text)
             )
             return element
